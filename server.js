@@ -47,23 +47,31 @@ app.get('/api/todos/search', function search(req, res) {
   /* This endpoint responds with the search results from the
    * query in the request. COMPLETE THIS ENDPOINT LAST.
    */
+
 });
 
 app.get('/api/todos', function index(req, res) {
   /* This endpoint responds with all of the todos
    */
+
+   res.json({data: todos});
 });
 
 app.post('/api/todos', function create(req, res) {
   /* This endpoint will add a todo to our "database"
    * and respond with the newly created todo.
    */
+   var tasks = req.params("tasks")
+   res.json({tasks});
 });
 
 app.get('/api/todos/:id', function show(req, res) {
   /* This endpoint will return a single todo with the
    * id specified in the route parameter (:id)
    */
+   var iden = req.params.id;
+   var select = todos[iden]
+   res.json({select});
 });
 
 app.put('/api/todos/:id', function update(req, res) {
@@ -71,6 +79,9 @@ app.put('/api/todos/:id', function update(req, res) {
    * id specified in the route parameter (:id) and respond
    * with the newly updated todo.
    */
+  //  var iden = req.params.id;
+  //  var select = todos[iden];
+  //  res.json({select}):
 });
 
 app.delete('/api/todos/:id', function destroy(req, res) {
