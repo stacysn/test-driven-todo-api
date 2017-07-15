@@ -63,23 +63,47 @@ app.get('/api/todos/:id', function show(req, res) {
   /* This endpoint will return a single todo with the
    * id specified in the route parameter (:id)
    */
-  //  var id = req.params.id;
-  //  console.log("THIS IS ID:", id);
-   var result = todos.filter(function(ele){
-     return ele._id === 7;
-   }) [0]
-
-   res.json({result});
-
-  //  res.send(todo.todoIds)
+   var iden = req.params.id;
+  //this filter function works too! just trying out the find function
+  //  var result = todos.filter(function(ele){
+  //    return ele._id == iden;
+  //  })[0];
+  var result = todos.find(function(ele){
+    return ele._id == iden;
+  })
+   res.json(result);
 });
 
+
+var iden = Math.floor(Math.random()) * 100;
 app.post('/api/todos', function create(req, res) {
   /* This endpoint will add a todo to our "database"
   * and respond with the newly created todo.
   */
-  var tasks = req.params("tasks")
-  res.json({todos});
+  var task = req.body.task;
+  var desc = req.body.description;
+
+  var newTodoList = {_id: iden, task: task, description: desc};
+  todos.push(newTodoList);
+  iden += 1;
+  res.json(newTodoList);
+});
+
+app.delete('/api/todos/:id', function destroy(req, res) {
+  /* This endpoint will delete a single todo with the
+  * id specified in the route parameter (:id) and respond
+  * with success.
+  */
+  var iden = req.params.id;
+  var result = parseInt(iden);
+  // console.log("THIS IS RESULT", result);
+  //filter function returns only whatever is equal to the result from the ele array
+  var newTodoList = todos.find(function(ele){
+    return ele._id === result
+  });
+  todos.splice(todos.indexOf(newTodoList), 1);
+
+  res.json(newTodoList);
 });
 
 app.put('/api/todos/:id', function update(req, res) {
@@ -87,21 +111,16 @@ app.put('/api/todos/:id', function update(req, res) {
    * id specified in the route parameter (:id) and respond
    * with the newly updated todo.
    */
-
+   var iden = req.params.id;
+   res.json({todos})
 });
 
-app.delete('/api/todos/:id', function destroy(req, res) {
-  /* This endpoint will delete a single todo with the
-   * id specified in the route parameter (:id) and respond
-   * with success.
-   */
-});
 
 /**********
  * SERVER *
  **********/
 
 // listen on port 3000
-app.listen(3000, function() {
+app.listen(3000, function(){
   console.log('Server running on http://localhost:3000');
 });
