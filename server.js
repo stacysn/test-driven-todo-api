@@ -47,14 +47,19 @@ app.get('/api/todos/search', function search(req, res) {
   /* This endpoint responds with the search results from the
    * query in the request. COMPLETE THIS ENDPOINT LAST.
    */
-
+   var searchTeam = req.query.q;
+   console.log("Search", searchTeam);
+   let filteredTodos = todos.filter(function(ele){
+     return (ele.task.toLowerCase().includes(searchTeam.toLowerCase()) || ele.description.toLowerCase().includes(searchTeam.toLowerCase()));
+   });
+   res.json({data : filteredTodos});
 });
+
 
 app.get('/api/todos', function index(req, res) {
   /* This endpoint responds with all of the todos
    */
    var index = req.params.id;
-   var selection
    res.json({data: todos});
 });
 
@@ -94,12 +99,12 @@ app.delete('/api/todos/:id', function destroy(req, res) {
   * id specified in the route parameter (:id) and respond
   * with success.
   */
-  var iden = req.params.id;
-  var result = parseInt(iden);
+
+  var result = parseInt(req.params.id);
   // console.log("THIS IS RESULT", result);
   //filter function returns only whatever is equal to the result from the ele array
   var newTodoList = todos.find(function(ele){
-    return ele._id === result
+    return ele._id == result
   });
   todos.splice(todos.indexOf(newTodoList), 1);
 
@@ -111,8 +116,16 @@ app.put('/api/todos/:id', function update(req, res) {
    * id specified in the route parameter (:id) and respond
    * with the newly updated todo.
    */
-   var iden = req.params.id;
-   res.json({todos})
+   var todoId = parseInt(req.params.id);
+   var updateTodo = todos.filter(function(ele){
+     return ele._id === todoId;
+   })[0];
+
+   updateTodo.task = req.body.task;
+
+   updateTodo.description = req.body.description;
+
+   res.json(updateTodo)
 });
 
 
